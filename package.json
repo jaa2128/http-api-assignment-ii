@@ -1,0 +1,19 @@
+{
+  "name": "http-api-assignment-ii",
+  "version": "1.0.0",
+  "main": "eslint.config.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julian Alvia",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/jaa2128/http-api-assignment-ii#readme",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0"
+  }
+}

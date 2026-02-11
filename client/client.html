@@ -5,7 +5,58 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
+    // function to send a POST request specifically to the server
+    const sendPost = aysnc (nameForm) => {
+      // Grab the info from the form
+      const url = nameForm.getAttribute('action');
+      const method = nameForm.getAttribute('method');
+    }
 
+    // function to send a request to server
+    const requestUpdate = async (userForm) => {
+
+      //Grab the URL and method described by the form
+      const url = userForm.querySelector('#urlField').value;
+      const method = userForm.querySelector('#methodSelect').value;
+
+      // Await the fetch response using the URL and correct request method
+      // Accept headers only support JSON
+      const response = await fetch(url, {
+        method, 
+        headers: {
+          'Accept': 'application/json'
+        },
+      });
+
+      // Now that there is a response, send it into the handleResponse function
+      // second param determines whether to parse the response or not
+      handleResponse(response, method === 'get');
+    }
+
+    const init = () => {
+      // grab the forms
+      const userForm = document.querySelector('#userForm');
+      const nameForm = document.querySelector('#nameForm');
+
+      // Function to handle request for user form
+      // also cancels built in html form action
+      const getUsers = (e) => {
+        e.preventDefault();
+        requestUpdate(userForm);
+        return false;
+      }
+
+      // Function to handle request for name form
+      const addUser = (e) => {
+        e.preventDefault();
+        sendPost(nameForm);
+        return false;
+      }
+
+      // Call respective functions for each form
+      userForm.addEventListener('submit', getUsers);
+      nameForm.addEventListener('submit', addUser);
+    }
   </script>
 </head>
 <body>

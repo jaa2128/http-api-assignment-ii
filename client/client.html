@@ -5,12 +5,79 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
+    // function to handle responses sent back by the server
+    const handleResponse = async (response, parseResponse) => {
+      
+      // grab the content section so it can be written to 
+      const content = document.querySelector('#content');
+
+      // based on response write the respective status
+      switch(response.status){
+        case 200: 
+          content.innerHTML = `<b>Success</b>`;
+          break;
+        case 201: 
+          content.innerHTML = `<b>Created</b>`;
+          break;
+        case 204: 
+          content.innerHTML = `<b>Updated (No Content)</b>`;
+          break;
+        case 400: 
+          content.innerHTML = `<b>Bad Request</b>`;
+          break;
+        case 404: 
+          content.innerHTML = `<b>Not Found</b>`;
+          break;
+        default:
+          content.innerHTML = `Error code not implemented by client.`;
+          break;
+      }
+
+      // If we want to parse the response
+      if(parseResponse){
+        const obj = await response.json();
+
+        // If there is a message display it
+        if(obj.message){
+          content.innerHTML += `<p>${obj.message}</p>`;
+        }
+        else{
+          // stringify JSON to display
+          content.innerHTML += `<p>${JSON.stringify(obj)}</p>`;
+        }
+
+       
+      }
+    }
+
+
     // function to send a POST request specifically to the server
-    const sendPost = aysnc (nameForm) => {
+    const sendPost = async (nameForm) => {
       // Grab the info from the form
       const url = nameForm.getAttribute('action');
       const method = nameForm.getAttribute('method');
-    }
+
+      const name = nameForm.querySelector('#nameField').value;
+      const age = nameForm.querySelector('#ageField').value;
+
+      // turn information to JSON by stringifying
+      const formData = JSON.stringify({name, age});
+
+      // await fetch response sending JSON, receiving JSON, and adding
+      // our form data into the body of the request
+      const response = await fetch(url, {
+        method: method,
+        headers:{
+          'Content-Type': 'application/json',
+          'Content-Length': formData.length,
+          'Accept': 'application/json'
+        },
+        body: formData
+      });
+
+      // Once we have the response, handle it client sid
+      handleResponse(response);
+    };
 
     // function to send a request to server
     const requestUpdate = async (userForm) => {

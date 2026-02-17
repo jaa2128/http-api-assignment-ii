@@ -1,5 +1,7 @@
-// object to contain user objects
-const users = {};
+// object to contain book object
+const fs = require('fs');
+const rawData = fs.readFileSync(`${__dirname}/../src/books.json`);
+const books = JSON.parse(rawData);
 
 // error messages
 const responses = {
@@ -37,7 +39,7 @@ const respondJSON = (request, response, status, object) => {
 
 // return user object as JSON
 const getUsers = (request, response) => {
-    respondJSON(request, response, 200, users);
+    respondJSON(request, response, 200, books);
 }
 
 const notFound = (request, response) => {
@@ -56,9 +58,9 @@ const addUsers = (request, response) => {
     }
 
     // check if the user exists, if it doesn't, create new user
-    if(!users[name]){
+    if(!books[name]){
 
-        users[name] = {
+        books[name] = {
             name: name,
         };
 
@@ -67,7 +69,7 @@ const addUsers = (request, response) => {
     }
 
     // add or update age for this user name
-    users[name].age = age;
+    books[name].age = age;
 
     // If a new user was created send 201 response
     if(isNewUserCreated){
